@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Twitch Trivia</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type ="text/javascript">
+        window.onload = function() {
+            init();
+        }
+    </script>
+</head>
+
+<body>
+    <div id = "category"></div>
+    <form onchange="changeCategory()">
+        <select id="categoryForm" name="category">
+            <option value="tv">TV</option>
+            <option value="science">Science</option>
+            <option value="music">Music</option>
+            <option value="twitch">Twitch</option>
+        </select>
+    </form>
+    <br>
+    <div id = "displayTriviaQuestion"></div>
+    <br>
+    <div id = "answer"></div>
+    <br>
+    <button id = "newTriviaQuestion" onclick="newQuestion();">Start</button>
+    <br>
+    <br>
+    <div id = "chat"></div>
+</body>
+
+<script src="game.js"></script>
+
+</html>
