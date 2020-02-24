@@ -3,34 +3,108 @@
     
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Twitch Trivia</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">    <title>Twitch Trivia</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js"></script>
     <script type ="text/javascript">
         window.onload = function() {
-            init();
+            document.getElementById('main').style.display = "none";
+            var tween = gsap.from("#intro", {
+                opacity: 0,
+                x: 1000,
+                y: 1000,
+                ease: "back.out(1)",
+                duration: 0.5
+            });
+            tween.play().then(function() {  });
         }
     </script>
 </head>
 
-<body>
-    <div id = "category"></div>
-    <form onchange="changeCategory()">
-        <select id="categoryForm" name="category">
-            <option value="tv">TV</option>
-            <option value="science">Science</option>
-            <option value="music">Music</option>
-            <option value="twitch">Twitch</option>
-        </select>
-    </form>
+<body> 
+    <div id = "intro" class="intro">
+        <style>
+            body {
+              font-family: 'Montserrat', serif;
+              font-size: 48px;
+              text-align: center;
+              color:rgb(255, 249, 248);
+              font-weight: bold;
+            }
+            input[type=text] {
+                width: 10%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                box-sizing: border-box;
+            }
+            .button {
+                background-color: #0582CA;
+                border: none;
+                color: white;
+                padding: 13px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+          </style>
+        <br> 
+        <img src="img/trivia_header.png" alt="Header" width="500" height="200">
+        <br> <br>
+        <p>ENTER CHANNEL NAME</p>
+        <input type="text" id="channelForm" name="channel" value="">
+        <!-- <button id="channelButton" class="button">Submit</button> -->
+        <input type="button" name="Submit" value="Submit" id="buttone" class="button">
+    </div>
+    <div id = "main" class = "main" style="display:none;">
+        <center>
+            <img src="img/trivia_header.png" alt="Header" width="375" height="150">
+            <br>
+            <div id = "category"></div>
+            <form onchange="changeCategory()">
+                <select id="categoryForm" name="category" class="select-css">
+                    <option value="default">Select Category</option>
+                    <option value="Science">Science</option>
+                    <option value="Twitch">Twitch</option>
+                    <option value="TV">TV</option>
+                    <option value="Music">Music</option>
+                </select>
+            </form>
     <br>
-    <div id = "displayTriviaQuestion"></div>
+            <div id = "displayTriviaQuestion"></div>
     <br>
-    <div id = "answer"></div>
+            <div id = "answer"></div>
     <br>
-    <button id = "newTriviaQuestion" onclick="newQuestion();">Start</button>
+            <button id = "newTriviaQuestion" onclick="newQuestion();" class="startButton">START</button>
+            <div id = "timeLeft"></div>
     <br>
     <br>
-    <div id = "chat"></div>
+        <table>
+            <td>
+                <p><h2 style= "text-align: center;">Chat</h2>
+                <div id = "chat" class="chat"></div></p>
+            </td>
+            <td>
+                <p style="text-align: center;"><strong>Leaderboard</strong></p>
+                <table id="leaderboard" border="1">
+                    <tr>
+                        <td><center>&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;&nbsp;</center></td>
+                        <td><center>&nbsp;&nbsp;&nbsp;Points&nbsp;&nbsp;&nbsp;</center></td>
+                    </tr>
+                    <div id = "lb">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </div>
+                </table>
+            </td>
+        </table>
+        </center>
+    </div>
 </body>
 
 <script src="game.js"></script>
