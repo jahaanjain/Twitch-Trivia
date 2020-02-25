@@ -14,7 +14,9 @@ var message;
 var timeToAnswer = 30, // 30 seconds
         display = document.querySelector('#timeLeft');
 var leaderboardJSON = [];
+var a;
 
+$.getScript("fuzzyset.js", function() { console.log('FuzzySet Loaded.') });
 
 document.getElementById('buttone').onclick = function() {
     var channel = document.getElementById('channelForm').value;
@@ -38,7 +40,7 @@ function init(channelName) { // Happens on website load
     channel = channelName;
     document.getElementById("displayTriviaQuestion").innerHTML = "Press the start button below, and the game will run by itself!";
     document.getElementById("category").innerHTML = "Category: " + triviaCategory;
-
+    leaderboard(true);
     connect();
     fetch("http://jservice.io/api/clues?category=67") // Television
     .then(response => response.json())
@@ -54,12 +56,13 @@ function init(channelName) { // Happens on website load
 function newQuestion() {
     var triviaPos = Math.floor(Math.random() * categories[triviaCategory].length);
     document.getElementById("displayTriviaQuestion").innerHTML = categories[triviaCategory][triviaPos].question;
-    document.getElementById("answer").innerHTML = "?????";
+    document.getElementById("answer").innerHTML = "Answer: ?????";
     document.getElementById("newTriviaQuestion").innerHTML = "Started!";
     document.getElementById("newTriviaQuestion").disabled = true;
     triviaQuestion = categories[triviaCategory][triviaPos].question;
     triviaAnswer = categories[triviaCategory][triviaPos].answer.replace(/<[^>]*>/g, '').replace("^\"|\"$", "");
     triviaActive = true;
+    a = FuzzySet(); a.add(triviaAnswer);
     console.log(triviaAnswer);
     startTimer(timeToAnswer, display);
 }
@@ -102,18 +105,20 @@ function connect() {
             var color = messageFull1[2].split('=').pop();
             username = colorStyle(color, username);
             message = messageFull1[messageFull1.length - 1].split(`:`).pop();
+            var checkMessage = messageFull1[messageFull1.length - 1].split(`:`).pop();
             message = colorStyle('#f5f5f5', message);
             if (message.length > 100) { message = message.substring(0, 100) + "..."; }
             document.getElementById("chat").innerHTML = `${username}: ${message}`;
-            checkForAnswer(username, false);
+            checkForAnswer(username, checkMessage, false);
         }
     };
 }
 
 function colorStyle(color, text) { return '<span style="color:' + color + '">' + text + '</span>'; }
 
-function checkForAnswer(username, forced) {
-    if (triviaActive && triviaAnswer.toLowerCase() == message.toLowerCase() || forced) {
+function checkForAnswer(username, message, forced) {
+    var b = a.get(message);
+    if (triviaActive && typeof b !== 'null' && b[0][0] > 0.7 || forced) {
         triviaActive = false;
         document.getElementById("answer").innerHTML = triviaAnswer;
         document.getElementById("newTriviaQuestion").innerHTML = username + " got the answer right!";
@@ -154,13 +159,14 @@ function startTimer(duration, display) {
 
         if (--timer < 0) {
             timer = 0;
-            checkForAnswer('Nobody', true);
+            checkForAnswer('Nobody', 'Nobody', true);
         }
     }, 1000);
 }
 function stopTimer() { clearInterval(mainTimer); }
 
 function leaderboard(reset) {
+    let topPlayers = 5;
     if (!reset) {
         function compare(a,b) { return a.points - b.points; }
         var sortedArray = leaderboardJSON.sort(compare);
@@ -172,7 +178,7 @@ function leaderboard(reset) {
         usernameCell.innerHTML = "&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;&nbsp;";
         pointsCell.innerHTML = "&nbsp;&nbsp;&nbsp;Points&nbsp;&nbsp;&nbsp;";
         for (var i = 0; i < sortedArray.length; i++) {
-            if (i > 3) { break; }
+            if (i > topPlayers) { break; }
             else {
                 var row = table.insertRow(1);
                 var usernameCell = row.insertCell(0);
@@ -190,10 +196,12 @@ function leaderboard(reset) {
         var pointsCell = row.insertCell(1);
         usernameCell.innerHTML = "&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;&nbsp;";
         pointsCell.innerHTML = "&nbsp;&nbsp;&nbsp;Points&nbsp;&nbsp;&nbsp;";
-        var row = table.insertRow(1);
-        var usernameCell = row.insertCell(0);
-        var pointsCell = row.insertCell(1);
-        usernameCell.innerHTML = "&nbsp;";
-        pointsCell.innerHTML = "&nbsp;";
+        for (var i = 0; i <= topPlayers; i++) {
+            var row = table.insertRow(1);
+            var usernameCell = row.insertCell(0);
+            var pointsCell = row.insertCell(1);
+            usernameCell.innerHTML = "&nbsp;";
+            pointsCell.innerHTML = "&nbsp;";
+        }
     }
 }

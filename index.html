@@ -3,6 +3,7 @@
     
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">    <title>Twitch Trivia</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -60,50 +61,77 @@
         <input type="button" name="Submit" value="Submit" id="buttone" class="button">
     </div>
     <div id = "main" class = "main" style="display:none;">
+        <table><tr>&nbsp;</tr><tr>&nbsp;</tr><tr>&nbsp;</tr><tr>&nbsp;</tr><tr>&nbsp;</tr></table>
         <center>
-            <img src="img/trivia_header.png" alt="Header" width="375" height="150">
-            <br>
-            <div id = "category"></div>
-            <form onchange="changeCategory()">
-                <select id="categoryForm" name="category" class="select-css">
-                    <option value="default">Select Category</option>
-                    <option value="Science">Science</option>
-                    <option value="Twitch">Twitch</option>
-                    <option value="TV">TV</option>
-                    <option value="Music">Music</option>
-                </select>
-            </form>
+            <table style="table-layout:fixed;">
+                <td class="restrict">
+                    <!-- How To Play -->
+                    <div id = "howToPlay" class = "howToPlay">
+                        <h2>How to play:</h2>
+                        <h3><strong>Streamers</strong>:</h3>
+                        <p>Just press the <strong>Start</strong> button and the game will run automatically!
+                        You can also choose different question categories by using the dropdown menu.</p>
+                        <h3><strong>Viewers</strong>:</h3>
+                        <p>Once you see a question, type what you think the answer might be in Twitch chat,
+                            if you're right, you will get a point. The leaderboard shows the top 5 players.
+                        </p>
+                    </div>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style = "text-align: center; table-layout:fixed;" class="restrict">
+                    <!-- Main section -->
+                    <img src="img/trivia_header.png" alt="Header" width="375" height="150">
     <br>
-            <div id = "displayTriviaQuestion"></div>
+                    <div id = "category" style="text-align:center"></div>
+                    <form onchange="changeCategory()">
+                        <select id="categoryForm" name="category" class="select-css">
+                            <option value="default">Select Category</option>
+                            <option value="Science">Science</option>
+                            <option value="Twitch">Twitch</option>
+                            <option value="TV">TV</option>
+                            <option value="Music">Music</option>
+                        </select>
+                    </form>
     <br>
-            <div id = "answer"></div>
+                    <div id = "displayTriviaQuestion"></div>
     <br>
-            <button id = "newTriviaQuestion" onclick="newQuestion();" class="startButton">START</button>
+                    <div id = "answer"></div>
+    <br>
+                    <button id = "newTriviaQuestion" onclick="newQuestion();" class="startButton">START</button>
+    <br>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="restrict">
+                    <!-- Leaderboards -->
+                    <div id = "howToPlay" class = "howToPlay" style = "text-align: center;">
+                        <br><br>
+                        <h2 style="text-align: center;"><strong>Leaderboard</strong></h2>
+                        <table id="leaderboard" border="1" class="center" style = "font-size: larger;">
+                            <tr>
+                                <td><center>&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;&nbsp;</center></td>
+                                <td><center>&nbsp;&nbsp;&nbsp;Points&nbsp;&nbsp;&nbsp;</center></td>
+                            </tr>
+                            <div id = "lb" style = "text-align: center;">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </div>
+                        </table>
+                    </div>
+                </td>
+            </table>
+    <br>
             <div id = "timeLeft"></div>
     <br>
-    <br>
-        <table>
-            <td>
-                <p><h2 style= "text-align: center;">Chat</h2>
-                <div id = "chat" class="chat"></div></p>
-            </td>
-            <td>
-                <p style="text-align: center;"><strong>Leaderboard</strong></p>
-                <table id="leaderboard" border="1">
-                    <tr>
-                        <td><center>&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;&nbsp;</center></td>
-                        <td><center>&nbsp;&nbsp;&nbsp;Points&nbsp;&nbsp;&nbsp;</center></td>
-                    </tr>
-                    <div id = "lb">
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </div>
-                </table>
-            </td>
-        </table>
+        <!-- Chat -->
+            <p><h2 style= "text-align: center;">Chat</h2>
+            <div id = "chat" class="chat"></div></p>
         </center>
+        <footer style="font-size: 20px;">
+            <br> <br>
+            Made by <a href="https://roaringiron.com">RoaringIron.</a> | Not affiliated with Twitch
+        </footer>
     </div>
 </body>
 

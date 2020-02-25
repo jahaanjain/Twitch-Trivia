@@ -1,3 +1,8 @@
+@viewport {
+    width: device-width ;
+    zoom: 1.0 ;
+}
+
 .intro {
     position:absolute;
     background-color: #00A6FB;
@@ -19,7 +24,7 @@
     margin:0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(304deg, #adff26, #ff6c28, #ffcc2d, #67ffc4, #678cff, #e367ff, #ff26b4, #f0ff26, #ff2626, #adff26);
+    background: linear-gradient(304deg, #adff26, #ff6c28, #ffcc2d, #67ffc4, #678cff, #e367ff, #ff26b4, #f0ff26, #ff2626, #adff26) center center fixed;
     background-size: 2000% 2000%;
 
     -webkit-animation: main 50s ease infinite;
@@ -40,6 +45,12 @@
     0%{background-position:0% 81%}
     50%{background-position:100% 20%}
     100%{background-position:0% 81%}
+}
+td.restrict {
+    max-width:700px;
+    overflow:hidden;
+    text-overflow:scroll;
+    white-space: normal;
 }
 .startButton {
     background-color: rgb(54, 230, 0);
@@ -65,17 +76,32 @@
     padding: 50px;
     margin: 20px;
 }
-
+.howToPlay {
+    background-color: rgb(61, 61, 61);
+    color: #f5f5f5;
+    border: 5px solid rgb(194, 194, 194);
+    font-size: 15px;
+    text-align: left;
+    width: 300px;
+    height: 375px;
+    padding: 20px;
+    margin: 5px;
+    margin-left: 5px;
+}
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+}
 .select-css {
-	display: block;
+    display: inline-block;
 	font-size: 16px;
 	font-family: 'Montserrat', serif;
-	font-weight: 700;
-	color: #444;
+    font-weight: 700;
+    color: #444;
 	line-height: 1;
 	padding: .6em 1.4em .5em .8em;
-	width: 10%;
-	max-width: 10%;
+	width: 25%;
+	max-width: 35%;
 	box-sizing: border-box;
 	margin: 10px;
 	border: 1px solid #aaa;
