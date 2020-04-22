@@ -2,10 +2,12 @@
 <html>
     
 <head>
+    <title>Twitch Trivia</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">    <title>Twitch Trivia</title>
+    <script src="https://kit.fontawesome.com/722bbe4efd.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js"></script>
     <script type ="text/javascript">
@@ -87,9 +89,10 @@
                         <select id="categoryForm" name="category" class="select-css">
                             <option value="default">Select Category</option>
                             <option value="Science">Science</option>
-                            <option value="Twitch">Twitch</option>
-                            <option value="TV">TV</option>
+                            <option value="Random">Random (Easy)</option>
                             <option value="Music">Music</option>
+                            <option value="Games">Games</option>
+                            <option value="Movies">Movies</option>
                         </select>
                     </form>
     <br>
@@ -135,10 +138,14 @@
         <!-- Chat -->
             <p><h2 style= "text-align: center;">Chat</h2>
             <div id = "chat" class="chat"></div></p>
-        </center>
+            <br>
+            <a href="https://github.com/jahaanjain/Twitch-Trivia"><i class="fab fa-github"></i></a>
+            <a href="https://twitter.com/RoaringIron"><i class="fab fa-twitter"></i></a>
+            <a href="https://roaringiron.com"><i class="fab fa-wpforms"></i></a>
+
     </div>
 </body>
 
 <script src="game.js"></script>
-
+<script src="fuzzyset.js"></script>
 </html>

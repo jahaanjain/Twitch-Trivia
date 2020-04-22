@@ -8,7 +8,7 @@ var triviaActive = false;
 var triviaQuestion;
 var triviaAnswer;
 var triviaCategory = "Science";
-var categories = [{ "TV": null, "Science": null, "Music": null, "Twitch": null }];
+var categories = [{ "Random": null, "Science": null, "Music": null, "Movies": null, "Games": null }];
 var channel = "abc123"; // default channel for now
 var message;
 var timeToAnswer = 30, // 30 seconds
@@ -21,7 +21,7 @@ $.getScript("fuzzyset.js", function() { console.log('FuzzySet Loaded.') });
 document.getElementById('buttone').onclick = function() {
     var channel = document.getElementById('channelForm').value;
     if (channel.length > 1) {
-        init(channel); console.log('channel logged');
+        init(channel); console.log('Channel logged, everything is ready!');
         var tl = gsap.timeline();
         tl.add( gsap.to("#intro", { opacity: 0, x: -1000, y: -1000, duration: 0.5, onComplete: tl1Done}) );
         tl.add( gsap.from("#main", { opacity: 0, ease: "Power2.easeOut", duration: 1}) );
@@ -42,17 +42,23 @@ function init(channelName) { // Happens on website load
     document.getElementById("category").innerHTML = "Category: " + triviaCategory;
     leaderboard(true);
     connect();
-    fetch("http://jservice.io/api/clues?category=67") // Television
+    const PROXYURL = 'https://cors-anywhere.herokuapp.com/';
+    fetch(PROXYURL + "https://puu.sh/FAGg9/d997fbc12e.json") // Random
     .then(response => response.json())
-    .then(json => categories.TV = json);
-    fetch("http://jservice.io/api/clues?category=25") // Science
+    .then(json => categories.Random = json);
+    fetch(PROXYURL + "https://puu.sh/FAG27/a3ef4536ea.json") // Science
     .then(response => response.json())
     .then(json => categories.Science = json);
-    fetch("http://jservice.io/api/clues?category=770") // Pop Music
+    fetch(PROXYURL + "https://puu.sh/FAG2w/56383f66b5.json") // Pop Music
     .then(response => response.json())
     .then(json => categories.Music = json);
+    fetch(PROXYURL + "https://puu.sh/FAGl1/c8d3541ac6.json") // Movies
+    .then(response => response.json())
+    .then(json => categories.Movies = json);
+    fetch(PROXYURL + "https://puu.sh/FAGcJ/16bcdff269.json") // Games
+    .then(response => response.json())
+    .then(json => categories.Games = json);
     document.getElementById("skipQuestion").disabled = true;
-
 }
 
 function newQuestion() {
@@ -65,8 +71,8 @@ function newQuestion() {
     triviaQuestion = categories[triviaCategory][triviaPos].question;
     triviaAnswer = categories[triviaCategory][triviaPos].answer.replace(/<[^>]*>/g, '').replace("^\"|\"$", "");
     triviaActive = true;
-    a = FuzzySet(); a.add(triviaAnswer);
-    console.log(triviaAnswer);
+    a = FuzzySet([`${triviaAnswer}`], false);
+    console.log('Trivia Answer: ' + triviaAnswer);
     startTimer(timeToAnswer, display);
 }
 
@@ -102,7 +108,7 @@ function connect() {
 
     chat.onmessage = function(event) {
         messageFull1 = event.data.split(/\r\n/)[0].split(`;`);
-        console.log(messageFull1);
+        // console.log(messageFull1);
         if (messageFull1.length >= 13 && triviaActive) {
             var username = messageFull1[3].split('=').pop();
             var color = messageFull1[2].split('=').pop();
@@ -120,35 +126,37 @@ function connect() {
 function colorStyle(color, text) { return '<span style="color:' + color + '">' + text + '</span>'; }
 
 function checkForAnswer(username, message, forced) {
-    console.log('clicked')
-    var b = a.get(message);
-    if ((triviaActive && typeof b !== 'null' && b[0][0] > 0.7) || forced) {
-        triviaActive = false;
-        document.getElementById("answer").innerHTML = triviaAnswer;
-        document.getElementById("newTriviaQuestion").innerHTML = username + " got the answer right!";
-        document.getElementById("skipQuestion").disabled = true;
-        stopTimer();
-        triviaQuestion = '';
-        triviaAnswer = undefined;
-        var timeleft = 5;
-        if (leaderboardJSON.some(obj => obj.username === username)) {
-            for (var i = 0; i < leaderboardJSON.length; i++) {
-                if (leaderboardJSON[i].username == username) { leaderboardJSON[i].points += 1; }
-            }
-        } 
-        else { leaderboardJSON.push({ "username": username, "points": 1 }); }
-        if (username !== 'Nobody') { leaderboard(false); }
-        var nextQuestionTimer = setInterval(function() {
-            if (timeleft <= 0) {
-                clearInterval(nextQuestionTimer);
-                document.getElementById("newTriviaQuestion").innerHTML = "Started!";
-                newQuestion();
-            } else {
-                document.getElementById("newTriviaQuestion").innerHTML = "Next question starting in " + timeleft + " seconds!";
-            }
-            timeleft -= 1;
-        }, 1000);
-    }
+    try {
+        var usernameNoFormat = username.split(`">`).pop().split(`</`)[0];
+        var b = a.get(message);
+        if (forced || (triviaActive && typeof b !== 'null' && b[0][0] > 0.8)) {
+            triviaActive = false;
+            document.getElementById("answer").innerHTML = 'Answer: ' + triviaAnswer;
+            document.getElementById("newTriviaQuestion").innerHTML = username + " got the answer right!";
+            document.getElementById("skipQuestion").disabled = true;
+            stopTimer();
+            triviaQuestion = '';
+            triviaAnswer = undefined;
+            var timeleft = 5;
+            if (leaderboardJSON.some(obj => obj.username === username)) {
+                for (var i = 0; i < leaderboardJSON.length; i++) {
+                    if (leaderboardJSON[i].username == username) { leaderboardJSON[i].points += 1; }
+                }
+            } 
+            else { if (usernameNoFormat !== 'Nobody') { leaderboardJSON.push({ "username": username, "points": 1 }); } }
+            if (usernameNoFormat !== 'Nobody') { leaderboard(false); }
+            var nextQuestionTimer = setInterval(function() {
+                if (timeleft <= 0) {
+                    clearInterval(nextQuestionTimer);
+                    document.getElementById("newTriviaQuestion").innerHTML = "Started!";
+                    newQuestion();
+                } else {
+                    document.getElementById("newTriviaQuestion").innerHTML = "Next question starting in " + timeleft + " seconds!";
+                }
+                timeleft -= 1;
+            }, 1000);
+        }
+    } catch (error) { console.log(`A guess was incorrect.`); }
 }
 
 function startTimer(duration, display) {
